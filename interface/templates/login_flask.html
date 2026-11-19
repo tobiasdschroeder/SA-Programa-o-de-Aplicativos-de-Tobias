@@ -1,0 +1,25 @@
+{% extends "base_flask.html" %}
+{% block title %}Acesso | Sistema Hospitalar{% endblock %}
+{% block body_class %}login-shell{% endblock %}
+{% block body %}
+<!-- Página de login: envia credenciais e token CSRF para a rota de autenticação. -->
+<main class="login-card">
+    <header class="login-brand"><span class="brand-mark">NH</span><span><strong>NEXO HOSPITALAR</strong><small>Sistema hospitalar</small></span></header>
+    <div class="login-body">
+        <p class="eyebrow">Acesso institucional</p>
+        <h1>Sistema Hospitalar</h1>
+        <p class="intro-copy">Informe suas credenciais autorizadas.</p>
+        <div class="flash-list">
+            {% for category, message in get_flashed_messages(with_categories=true) %}
+            <div class="flash-message {{ category }}" role="alert">{{ message }}</div>
+            {% endfor %}
+        </div>
+        <form method="post" action="{{ url_for('auth.login') }}" class="login-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="field"><label for="usuario">Usuário <span class="required">*</span></label><input id="usuario" name="usuario" type="text" autocomplete="username" required></div>
+            <div class="field"><label for="senha">Senha <span class="required">*</span></label><input id="senha" name="senha" type="password" autocomplete="current-password" required></div>
+            <button class="btn btn-primary" type="submit">Entrar</button>
+        </form>
+    </div>
+</main>
+{% endblock %}

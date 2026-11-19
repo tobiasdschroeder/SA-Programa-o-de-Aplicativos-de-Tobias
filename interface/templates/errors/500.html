@@ -1,0 +1,4 @@
+{% extends "base_flask.html" %}
+{% block title %}Erro interno{% endblock %}
+{% block body %}<main class="page-content"><h1>500 - Erro interno</h1><p>Ocorreu uma falha inesperada.</p><a class="btn btn-primary" href="{{ url_for('dashboard.dashboard') }}">Voltar</a></main>{% endblock %}
+<!-- Página apresentada pelo Flask em caso de erro interno inesperado. -->

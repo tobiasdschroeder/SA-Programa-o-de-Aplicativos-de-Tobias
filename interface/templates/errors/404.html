@@ -1,0 +1,4 @@
+{% extends "base_flask.html" %}
+{% block title %}Página não encontrada{% endblock %}
+{% block body %}<main class="page-content"><h1>404 - Página não encontrada</h1><p>O endereço solicitado não existe.</p><a class="btn btn-primary" href="{{ url_for('dashboard.dashboard') }}">Voltar</a></main>{% endblock %}
+<!-- Página apresentada pelo Flask para endereços inexistentes. -->

@@ -63,30 +63,72 @@ nem os critérios de avaliação comunicados em aula**.
 
 ```text
 .
+├── Comentários.md
 ├── README.md
 ├── documentos/
 │   └── SA_INTEGRAL.md
 ├── codigo/
-│   └── app.py
+│   ├── __init__.py
+│   ├── app.py
+│   ├── gerenciador.py
+│   ├── modelos.py
+│   ├── persistencia.py
+│   ├── validacoes.py
+│   ├── test_app.py
+│   └── test_gerenciador.py
 ├── interface/
 │   ├── index.html
+│   ├── login.html
 │   ├── style.css
-│   └── script.js
+│   ├── script.js
+│   └── README.md
 ├── banco_de_dados/
 │   ├── estrutura.sql
 │   └── crud.sql
 └── .gitignore
 ```
 
-**Todos os arquivos de código, interface e banco estão vazios propositalmente.**
-Você desenvolverá seu próprio projeto. Não existe solução pronta nesse repositório.
+O repositório agora contém uma implementação Python para gerenciamento de
+pacientes e um protótipo visual HTML/CSS em `interface/`. O protótipo não se
+conecta ao Python: a aplicação existente funciona pelo terminal e ainda não
+possui rotas web ou autenticação. Consulte
+[a documentação da interface](interface/README.md) para ver o escopo e as
+limitações da integração.
 
-- **`codigo/app.py`**: seu código Python.
-- **`interface/`**: estrutura, estilo e comportamentos da interface.
-- **`banco_de_dados/`**: definição das tabelas e comandos SQL do seu sistema.
+- **`codigo/app.py`**: menu e interação pelo terminal.
+- **`codigo/gerenciador.py`**: regras de negócio e operações de pacientes.
+- **`codigo/modelos.py`** e **`codigo/validacoes.py`**: entidade e regras de validação.
+- **`codigo/persistencia.py`**: criação e acesso ao banco SQLite local.
+- **`codigo/test_*.py`**: testes automatizados do back-end.
+- **`interface/`**: páginas e estilos do protótipo; consulte seu README para
+	limitações.
+- **`banco_de_dados/`**: espaço reservado para scripts SQL; os arquivos ainda não
+	implementam o schema nem operações. O SQLite atual é criado por
+	`codigo/persistencia.py`.
 - **`documentos/SA_INTEGRAL.md`**: enunciado e capacidades institucionais da SA.
 
 A estrutura é um ponto de partida; o professor orientará possíveis ajustes.
+
+## Execução e dados
+
+Execute o sistema de terminal a partir da raiz do projeto:
+
+```bash
+python -m codigo.app
+```
+
+O banco SQLite é criado por padrão em `~/.sistema_hospitalar/pacientes.sqlite3`.
+Defina `PACIENTES_DB_PATH` para usar outro caminho. Os testes usam um banco
+temporário:
+
+```bash
+python -m unittest discover -s codigo -v
+```
+
+O gerenciador reutiliza o menor ID positivo livre após uma exclusão. A tabela
+`transacoes` guarda o número do paciente, não uma identidade histórica separada;
+por isso, os eventos de um cadastro excluído podem compartilhar o mesmo número
+com um cadastro posterior. Esta versão é didática: não use dados pessoais reais.
 
 ## Como registrar e entregar seu trabalho
 

@@ -1,0 +1,10 @@
+{% extends "base_flask.html" %}
+{% block title %}Acesso negado{% endblock %}
+{% block body %}
+<!-- Página apresentada pelo Flask quando o recurso exige acesso não autorizado. -->
+<main class="page-content">
+    <h1>403 - Acesso negado</h1>
+    <p>Você não possui acesso a este recurso.</p>
+    <a class="btn btn-primary" href="{{ url_for('dashboard.dashboard') }}">Voltar</a>
+</main>
+{% endblock %}

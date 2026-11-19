@@ -1,0 +1,276 @@
+:root {
+    --navy: #12355b;
+    --navy-deep: #0b2544;
+    --blue: #2563eb;
+    --green: #16805a;
+    --purple: #7c3aed;
+    --orange: #d97706;
+    --red: #dc2626;
+    --ink: #1f2937;
+    --muted: #64748b;
+    --line: #dde5ef;
+    --canvas: #f3f6fa;
+    --paper: #fff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Estilos estruturais: sidebar, topbar, áreas principais e responsividade. */
+
+.app-layout {
+    min-height: 100vh;
+}
+
+.sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 20;
+    width: 248px;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 16px 18px;
+    background: linear-gradient(180deg, var(--navy-deep), var(--navy));
+    color: #fff;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-height: 48px;
+    padding: 0 8px 24px;
+}
+
+.brand-mark {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border-radius: 10px;
+    background: #fff;
+    color: var(--navy);
+    font-weight: 900;
+    font-size: 20px;
+}
+
+.brand strong {
+    display: block;
+    font-size: 14px;
+    letter-spacing: .4px;
+}
+
+.brand small {
+    display: block;
+    margin-top: 2px;
+    color: #bdcde0;
+    font-size: 10px;
+}
+
+.nav-caption {
+    margin: 0 10px 8px;
+    color: #93a8c2;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.primary-nav {
+    display: grid;
+    gap: 5px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 43px;
+    padding: 0 11px;
+    border-radius: 7px;
+    color: #d9e4f2;
+    font-size: 13px;
+}
+
+.nav-link:hover,
+.nav-link.is-current {
+    background: rgba(255, 255, 255, .12);
+    color: #fff;
+}
+
+.nav-index {
+    width: 22px;
+    color: #91a7c2;
+    font-size: 10px;
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+}
+
+.environment-note {
+    display: flex;
+    gap: 10px;
+    padding: 12px 9px;
+    border-top: 1px solid rgba(255, 255, 255, .12);
+    color: #d9e4f2;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    flex: 0 0 8px;
+    margin-top: 5px;
+    border-radius: 50%;
+    background: #34d399;
+}
+
+.environment-note strong,
+.environment-note small {
+    display: block;
+}
+
+.environment-note strong {
+    font-size: 11px;
+}
+
+.environment-note small {
+    margin-top: 2px;
+    color: #9fb1c7;
+    font-size: 9px;
+}
+
+.main-content {
+    min-height: 100vh;
+    margin-left: 248px;
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 clamp(22px, 4vw, 52px);
+    border-bottom: 1px solid var(--line);
+    background: rgba(255, 255, 255, .96);
+}
+
+.breadcrumb {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.breadcrumb strong {
+    color: var(--navy);
+}
+
+.topbar-link {
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.page-content {
+    width: min(1180px, 100%);
+    margin: 0 auto;
+    padding: 38px clamp(22px, 4vw, 52px) 24px;
+}
+
+.page-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 30px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    color: #7a8796;
+    font-size: 10px;
+}
+
+@media (max-width: 980px) {
+    .sidebar {
+        width: 210px;
+    }
+
+    .main-content {
+        margin-left: 210px;
+    }
+}
+
+@media (max-width: 720px) {
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        padding: 12px 16px 8px;
+    }
+
+    .brand {
+        padding-bottom: 10px;
+    }
+
+    .brand-mark {
+        width: 36px;
+        height: 36px;
+    }
+
+    .nav-caption,
+    .sidebar-bottom {
+        display: none;
+    }
+
+    .primary-nav {
+        display: flex;
+        overflow-x: auto;
+        gap: 4px;
+        padding-bottom: 4px;
+    }
+
+    .nav-link {
+        flex: 0 0 auto;
+        min-height: 38px;
+        padding: 0 9px;
+    }
+
+    .nav-index {
+        width: auto;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .topbar {
+        height: 54px;
+        padding: 0 16px;
+    }
+
+    .page-content {
+        padding: 26px 16px 18px;
+    }
+
+    .page-footer {
+        flex-direction: column;
+    }
+}
