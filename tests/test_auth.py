@@ -17,6 +17,17 @@ class RepositorioUsuarioTeste:
     def contar_usuarios(self):
         return 1
 
+    def buscar_por_id(self, usuario_id):
+        if usuario_id == 1:
+            return {"id": 1, "nome": "Usuário Teste", "usuario": "teste", "ativo": 1}
+        return None
+
+    def atualizar_usuario(self, usuario_id, nome, usuario, senha=None):
+        return None
+
+    def excluir_usuario(self, usuario_id):
+        return None
+
 
 class RepositorioSemUsuariosTeste:
     def contar_usuarios(self):
@@ -122,7 +133,41 @@ class WebAuthTests(unittest.TestCase):
         resposta_raiz = client.get("/")
         resposta_login = client.get("/login")
         self.assertIn("/usuarios/cadastrar", resposta_raiz.headers["Location"])
-        self.assertIn("/usuarios/cadastrar", resposta_login.headers["Location"])
+        self.assertEqual(resposta_login.status_code, 200)
+        self.assertIn("Cadastrar-se", resposta_login.get_data(as_text=True))
+
+    def test_login_mostra_cadastrar_se_com_conta_existente(self):
+        resposta = self.client.get("/login")
+        self.assertEqual(resposta.status_code, 200)
+        self.assertIn("Cadastrar-se", resposta.get_data(as_text=True))
+
+    def test_perfil_exige_login_e_mostra_dados(self):
+        resposta = self.client.get("/perfil")
+        self.assertIn("/login", resposta.headers["Location"])
+        self.client.get("/login")
+        token = self.obter_token()
+        self.client.post("/login", data={
+            "usuario": "teste",
+            "senha": "senha-correta",
+            "csrf_token": token,
+        })
+        resposta = self.client.get("/perfil")
+        self.assertEqual(resposta.status_code, 200)
+        self.assertIn("Meu perfil", resposta.get_data(as_text=True))
+
+    def test_dashboard_mostra_menu_do_perfil(self):
+        self.client.get("/login")
+        token = self.obter_token()
+        resposta = self.client.post("/login", data={
+            "usuario": "teste",
+            "senha": "senha-correta",
+            "csrf_token": token,
+        })
+        self.assertEqual(resposta.status_code, 302)
+        resposta = self.client.get("/dashboard")
+        conteudo = resposta.get_data(as_text=True)
+        self.assertIn("profile-menu", conteudo)
+        self.assertIn("Meu perfil", conteudo)
 
 
 if __name__ == "__main__":

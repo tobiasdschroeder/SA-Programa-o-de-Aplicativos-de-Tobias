@@ -58,6 +58,14 @@ class UsuarioRepository:
             """, (str(usuario).strip(),)).fetchone()
             return dict(registro) if registro else None
 
+    def buscar_por_id(self, usuario_id):
+        with database_connection(caminho=self.caminho) as conexao:
+            registro = conexao.execute("""
+                SELECT id, nome, usuario, ativo
+                FROM usuarios WHERE id = ?
+            """, (int(usuario_id),)).fetchone()
+            return dict(registro) if registro else None
+
     def verificar_senha(self, usuario, senha):
         registro = self.buscar_por_usuario(usuario)
         if not registro or not registro["ativo"]:
@@ -70,3 +78,27 @@ class UsuarioRepository:
         with database_connection(caminho=self.caminho) as conexao:
             registro = conexao.execute("SELECT COUNT(*) AS total FROM usuarios").fetchone()
             return int(registro["total"])
+
+    def atualizar_usuario(self, usuario_id, nome, usuario, senha=None):
+        nome = str(nome).strip()
+        usuario = str(usuario).strip()
+        if not nome or not usuario:
+            raise ValueError("Nome e usuário são obrigatórios.")
+        if len(usuario) < 3:
+            raise ValueError("O nome de usuário deve ter pelo menos 3 caracteres.")
+        if senha:
+            senha = str(senha)
+            if len(senha) < 8:
+                raise ValueError("A senha deve ter pelo menos 8 caracteres.")
+        with database_connection(caminho=self.caminho) as conexao:
+            try:
+                if senha:
+                    conexao.execute("UPDATE usuarios SET nome = ?, usuario = ?, senha_hash = ? WHERE id = ?", (nome, usuario, generate_password_hash(senha), int(usuario_id)))
+                else:
+                    conexao.execute("UPDATE usuarios SET nome = ?, usuario = ? WHERE id = ?", (nome, usuario, int(usuario_id)))
+            except sqlite3.IntegrityError as erro:
+                raise ValueError("O usuário já está cadastrado.") from erro
+
+    def excluir_usuario(self, usuario_id):
+        with database_connection(caminho=self.caminho) as conexao:
+            conexao.execute("DELETE FROM usuarios WHERE id = ?", (int(usuario_id),))

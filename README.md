@@ -109,57 +109,44 @@ limitações da integração.
 
 A estrutura é um ponto de partida; o professor orientará possíveis ajustes.
 
-## Execução e dados
+## Execução local atual do sistema Flask
 
-Execute o sistema de terminal a partir da raiz do projeto:
-
-```bash
-python -m codigo.app
-```
-
-O banco SQLite é criado por padrão em `~/.sistema_hospitalar/pacientes.sqlite3`.
-Defina `PACIENTES_DB_PATH` para usar outro caminho. Os testes usam um banco
-temporário:
+Crie um ambiente virtual limpo e instale as dependências:
 
 ```bash
-python -m unittest discover -s codigo -v
+python -m venv .venv
+.venv\Scripts\activate
+python -m pip install -r requirements.txt
 ```
 
-O gerenciador reutiliza o menor ID positivo livre após uma exclusão. A tabela
-`transacoes` guarda o número do paciente, não uma identidade histórica separada;
-por isso, os eventos de um cadastro excluído podem compartilhar o mesmo número
-com um cadastro posterior. Esta versão é didática: não use dados pessoais reais.
+Configure a chave secreta e execute apenas em modo de desenvolvimento:
 
-## Como registrar e entregar seu trabalho
+```bash
+set FLASK_SECRET_KEY=chave-secreta-ficticia-local
+set FLASK_ENV=development
+python app.py
+```
 
-1. Leia a SA e selecione seu projeto.
-2. No repositório-base, clique em **Use this template → Create a new repository**.
-3. Crie **um repositório privado na sua própria conta**, com nome identificável para a disciplina.
-4. Clone seu repositório individual no computador e trabalhe nos arquivos da etapa atual.
-5. Faça `commit` e `push` no **seu próprio repositório**, registrando sua evolução.
-6. Compartilhe o link com o professor e, se solicitado, convide-o como colaborador para acesso ao repositório privado.
-7. Apresente a funcionalidade em execução e explique suas decisões técnicas.
+Em produção, defina uma chave forte por variável de ambiente, use `FLASK_ENV=production` e coloque o aplicativo atrás de um servidor HTTPS. Não use `debug=True` nem publique dados reais.
 
-> **Atenção:** não envie suas entregas à `main` do repositório-base do professor.
-> Cada aluno terá histórico próprio, e os trabalhos não serão misturados.
-> Em repositórios privados de contas pessoais, convidar alguém como colaborador
-> também lhe concede permissão de escrita nesse repositório individual.
+## Funcionalidades documentadas
 
-### Exemplos de mensagens de commit
+- Login e logout com sessão autenticada.
+- Primeiro usuário cadastrado por fluxo público; contas posteriores exigem sessão.
+- Cadastro, consulta, atualização, listagem e desativação de pacientes.
+- Exclusão permanente permitida apenas para pacientes inativos.
+- Verificação de CPF cadastrado.
+- Aceitação de CPF fictício com 11 dígitos ou formato padrão, sem consulta a bases públicas.
+- Proteção CSRF em operações POST, PUT, PATCH e DELETE.
+- Senhas armazenadas com hash pelo Werkzeug.
 
-- `docs: registra escolha do contexto`
-- `feat: inicia primeira funcionalidade`
-- `refactor: organiza funções e comentários`
-- `test: verifica comportamento com entrada inválida`
+## Testes automatizados
 
-## Conduta e cuidados
+Os testes são isolados por banco temporário e usam somente identificadores, nomes e credenciais fictícios:
 
-Desenvolva suas próprias soluções, teste o que escrever e esteja preparado para
-explicar o código. Use dados fictícios e **não publique senhas, credenciais,
-chaves de API nem dados pessoais reais**.
+```bash
+pytest -v
+python -m unittest discover -s tests -v
+```
 
-**Documento de referência:** [Situação de Aprendizagem nº 1 — Da Ideia ao Código](documentos/SA_INTEGRAL.md).
-
-## Tobias
-## Desenvolvimento de Sistemas Vespertino
-## 6. Hospital
+A cobertura recomendada inclui login válido e inválido, campos obrigatórios, registro duplicado, token CSRF inválido, CPF fictício, atualização, desativação e exclusão permanente.

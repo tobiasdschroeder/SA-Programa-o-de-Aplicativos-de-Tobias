@@ -15,6 +15,7 @@ def obter_manager():
 @pacientes_bp.route("/cadastrar", methods=["GET", "POST"])
 @login_required
 def cadastrar():
+    # Recebe os dados do formulário, chama as regras de negócio e informa o resultado.
     resultado = None
     if request.method == "POST":
         dados = {campo: request.form.get(campo, "").strip()
@@ -27,6 +28,7 @@ def cadastrar():
 @pacientes_bp.route("/consultar", methods=["GET", "POST"])
 @login_required
 def consultar():
+    # Localiza um paciente por ID ou CPF e mantém o filtro de inativos opcional.
     paciente = None
     if request.method == "POST":
         identificador = request.form.get("identificador", "").strip()
@@ -40,6 +42,7 @@ def consultar():
 @pacientes_bp.route("/inativos")
 @login_required
 def listar():
+    # Separa pacientes ativos e inativos para apresentação nas duas listas.
     manager = obter_manager()
     return render_template("pacientes_flask.html", modo="listar",
                            ativos=manager.listar_pacientes(),
@@ -49,6 +52,7 @@ def listar():
 @pacientes_bp.route("/atualizar", methods=["GET", "POST"])
 @login_required
 def atualizar():
+    # Localiza o registro pelo ID e aplica somente alterações validadas pelo gerenciador.
     paciente = None
     resultado = None
     paciente_id = request.args.get("paciente_id", "")
@@ -78,6 +82,7 @@ def atualizar():
 @pacientes_bp.route("/excluir", methods=["GET", "POST"])
 @login_required
 def excluir():
+    # Solicita a exclusão definitiva; o gerente rejeita pacientes que ainda estão ativos.
     paciente = None
     resultado = None
     if request.method == "POST":
@@ -95,6 +100,7 @@ def excluir():
 @pacientes_bp.route("/verificar", methods=["GET", "POST"])
 @login_required
 def verificar():
+    # Normaliza e verifica o CPF entre os cadastros ativos e inativos.
     cadastrado = None
     cpf = ""
     if request.method == "POST":

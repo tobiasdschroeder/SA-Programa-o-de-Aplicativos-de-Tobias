@@ -27,16 +27,7 @@ def validar_cpf(valor):
     texto = str(valor).strip()
     if not re.fullmatch(r"(?:[0-9]{11}|[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2})", texto):
         raise ValueError("CPF inválido. Use 11 dígitos ou 999.999.999-99.")
-    cpf = re.sub(r"\D", "", texto)
-    if cpf == cpf[0] * 11:
-        raise ValueError("CPF inválido.")
-    for posicao in (10, 11):
-        soma = sum(int(cpf[indice]) * (posicao - indice) for indice in range(posicao - 1))
-        digito = (soma * 10) % 11
-        digito = 0 if digito == 10 else digito
-        if int(cpf[posicao - 1]) != digito:
-            raise ValueError("CPF inválido.")
-    return cpf
+    return re.sub(r"\D", "", texto)
 
 
 def validar_data(valor):

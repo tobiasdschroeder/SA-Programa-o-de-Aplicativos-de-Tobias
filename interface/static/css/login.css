@@ -6,8 +6,14 @@
 .login-card .login-brand strong { display:block; color:var(--navy); }.login-card .login-brand small { color:var(--muted); }
 .login-card .login-body { padding:24px 28px 28px; }.login-card h1 { margin:8px 0 6px; font-size:34px; }.login-card .intro-copy { margin-bottom:18px; }
 .login-card .login-form { display:grid; grid-template-columns:1fr; gap:14px; }.login-card .login-form .btn { width:100%; }
+.login-card .login-form .cadastro-link { width:100%; text-decoration:none; }
 .flash-list { display:grid; gap:8px; }.flash-message { padding:12px 14px; border:1px solid #bfdbfe; border-radius:8px; background:#eff6ff; color:#315678; }.flash-message.erro { border-color:#fecaca; background:#fef2f2; color:#991b1b; }.flash-message.sucesso { border-color:#bbf7d0; background:#f0fdf4; color:#166534; }.flash-message.aviso { border-color:#fed7aa; background:#fff7ed; color:#9a3412; }
 .topbar-actions { display:flex; align-items:center; gap:8px; }.topbar-actions form { margin:0; }.topbar-actions .btn { min-height:38px; }
 .auth-page { width:min(620px,100%); }.auth-page .form-grid { background:#fff; padding:20px; border:1px solid var(--line); border-radius:10px; }
 .user-table-wrap { margin-top:16px; }
-@media (max-width:720px){.login-shell{padding:16px}.login-card .login-brand,.login-card .login-body{padding-left:18px;padding-right:18px}.topbar-actions{gap:5px}.topbar-actions .btn{padding:0 9px;font-size:11px}.topbar-actions .btn-user{display:none}}
+.profile-form { background:#fff; }
+.danger-zone { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-top:24px; padding:18px; border:1px solid #fecaca; border-radius:10px; background:#fff7f7; }
+.danger-zone h2 { margin:0 0 6px; color:#991b1b; font-size:18px; }
+.danger-zone p { margin:0; color:#7f1d1d; font-size:12px; }
+.danger-zone form { margin:0; }
+@media (max-width:720px){.login-shell{padding:16px}.login-card .login-brand,.login-card .login-body{padding-left:18px;padding-right:18px}.topbar-actions{gap:5px}.topbar-actions .btn{padding:0 9px;font-size:11px}.topbar-actions .btn-user{display:none}.danger-zone{align-items:flex-start;flex-direction:column}.danger-zone form,.danger-zone .btn{width:100%}}

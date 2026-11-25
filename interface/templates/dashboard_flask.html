@@ -11,10 +11,13 @@
             <a class="nav-link" href="{{ url_for('pacientes.consultar') }}"><span class="nav-index">03</span>Consultar</a>
             <a class="nav-link" href="{{ url_for('pacientes.atualizar') }}"><span class="nav-index">04</span>Atualizar</a>
             <a class="nav-link" href="{{ url_for('pacientes.listar') }}"><span class="nav-index">05</span>Listar</a>
+            <a class="nav-link" href="{{ url_for('pacientes.excluir') }}"><span class="nav-index">06</span>Exclusão permanente</a>
+            <a class="nav-link" href="{{ url_for('pacientes.verificar') }}"><span class="nav-index">07</span>Verificar CPF</a>
+            <a class="nav-link" href="{{ url_for('auth.perfil') }}"><span class="nav-index">08</span>Meu perfil</a>
         </nav>
     </aside>
     <main class="main-content">
-        <header class="topbar"><div class="breadcrumb">Sistema hospitalar / <strong>Gestão de pacientes</strong></div><div class="topbar-actions"><a class="btn btn-primary" href="{{ url_for('auth.cadastrar_usuario') }}">Cadastrar usuário</a><form method="post" action="{{ url_for('auth.logout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-secondary" type="submit">Sair</button></form></div></header>
+        <header class="topbar"><div class="breadcrumb">Sistema hospitalar / <strong>Gestão de pacientes</strong></div><div class="topbar-actions"><details class="profile-menu"><summary class="profile-trigger" aria-label="Abrir menu do perfil"><span aria-hidden="true">👤</span></summary><div class="profile-dropdown"><strong>{{ session.nome }}</strong><a class="btn btn-primary" href="{{ url_for('auth.perfil') }}">Meu perfil</a></div></details><form method="post" action="{{ url_for('auth.logout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-secondary" type="submit">Sair</button></form></div></header>
         <div class="page-content">
             <!-- Dashboard: apresenta os acessos às operações disponíveis do sistema hospitalar. -->
             <section class="welcome-row"><div><p class="eyebrow">Cadastro clínico</p><h1>Gestão de Pacientes</h1><p class="intro-copy">Consulta, cadastro e manutenção dos pacientes.</p></div></section>

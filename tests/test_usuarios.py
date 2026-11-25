@@ -25,6 +25,19 @@ class UsuarioRepositoryTests(unittest.TestCase):
         self.repositorio.criar_usuario("Usuário Teste", "teste", "senha-correta")
         self.assertIsNone(self.repositorio.verificar_senha("teste", "senha-incorreta"))
 
+    def test_atualiza_perfil_e_senha(self):
+        usuario_id = self.repositorio.criar_usuario("Usuário Teste", "teste", "senha-correta")
+        self.repositorio.atualizar_usuario(usuario_id, "Nome Atualizado", "novo-teste", "nova-senha")
+        perfil = self.repositorio.buscar_por_id(usuario_id)
+        self.assertEqual(perfil["nome"], "Nome Atualizado")
+        self.assertEqual(perfil["usuario"], "novo-teste")
+        self.assertIsNotNone(self.repositorio.verificar_senha("novo-teste", "nova-senha"))
+
+    def test_exclui_usuario(self):
+        usuario_id = self.repositorio.criar_usuario("Usuário Teste", "teste", "senha-correta")
+        self.repositorio.excluir_usuario(usuario_id)
+        self.assertIsNone(self.repositorio.buscar_por_id(usuario_id))
+
 
 if __name__ == "__main__":
     unittest.main()

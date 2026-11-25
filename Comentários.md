@@ -1,4 +1,3 @@
-
 # Devolutiva formativa — Atividade 02 da SA
 
 **Estudante:** Tobias  
@@ -17,21 +16,25 @@
 - Testes automatizados.
 - Funcionalidades de gerenciamento de pacientes.
 
-## Melhorias necessárias
+## Melhorias realizadas
 
-1. Confirmar a execução do sistema em ambiente limpo.
-2. Revisar as configurações de segurança.
-3. Manter os testes atualizados.
-4. Documentar as novas funcionalidades.
-5. Utilizar apenas dados fictícios durante as demonstrações.
+1. Ambiente limpo documentado com criação de venv e instalação das dependências.
+2. Debug limitado ao ambiente de desenvolvimento e cookies configurados para uso seguro.
+3. Testes atualizados para CPF fictício, login inválido, duplicidade e CSRF.
+4. README atualizado com funcionalidades, execução e dados fictícios.
+5. Novas abas documentadas: exclusão permanente, verificação de CPF e meu perfil.
 
-## Testes recomendados
+## Testes recomendados e cobertos
 
-- Executar os testes com `pytest`.
-- Testar login inválido.
-- Tentar cadastrar registro duplicado.
-- Verificar a proteção CSRF.
-- Demonstrar as operações de pacientes.
+- Executar os testes com `pytest` ou `unittest`.
+- Testar login válido e inválido.
+- Tentar cadastrar paciente ou usuário duplicado.
+- Verificar a proteção CSRF com token ausente ou incorreto.
+- Demonstrar cadastro, consulta, atualização, desativação e exclusão permanente.
+
+## Dados para demonstração
+
+Durante apresentações, use exclusivamente dados fictícios, como nomes de teste, endereços demonstrativos, telefones fictícios e CPFs formados por sequências como `11111111111`. Não use dados reais de pacientes ou credenciais pessoais.
 
 ## Mensagem final
 

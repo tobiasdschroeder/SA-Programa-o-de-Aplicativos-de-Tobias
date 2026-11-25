@@ -44,14 +44,13 @@ def login():
     if session.get("usuario_id"):
         return redirect(url_for("dashboard.dashboard"))
     repositorio = current_app.config["USUARIO_REPOSITORY"]
-    if repositorio.contar_usuarios() == 0:
-        return redirect(url_for("auth.cadastrar_usuario"))
+    sem_usuarios = repositorio.contar_usuarios() == 0
     if request.method == "POST":
         usuario = request.form.get("usuario", "").strip()
         senha = request.form.get("senha", "")
         if not usuario or not senha:
             flash("Informe usuário e senha.", "erro")
-            return render_template("login_flask.html"), 400
+            return render_template("login_flask.html", sem_usuarios=sem_usuarios), 400
         autenticado = repositorio.verificar_senha(usuario, senha)
         if not autenticado:
             flash("Usuário ou senha inválidos.", "erro")
@@ -67,7 +66,7 @@ def login():
         if partes.scheme or partes.netloc or not partes.path.startswith("/"):
             destino = url_for("dashboard.dashboard")
         return redirect(destino)
-    return render_template("login_flask.html")
+    return render_template("login_flask.html", sem_usuarios=sem_usuarios)
 
 
 @auth_bp.route("/logout", methods=["POST"])
@@ -79,11 +78,12 @@ def logout():
 
 @auth_bp.route("/usuarios/cadastrar", methods=["GET", "POST"])
 def cadastrar_usuario():
-    # Permite cadastro público apenas enquanto não existir nenhuma conta.
+    # Permite o primeiro cadastro público; novas contas não ficam abertas sem sessão.
     repositorio = current_app.config["USUARIO_REPOSITORY"]
     if repositorio.contar_usuarios() > 0 and not session.get("usuario_id"):
-        flash("Faça login para cadastrar novos usuários.", "aviso")
+        flash("Faça login para criar uma conta com acesso ao sistema.", "aviso")
         return redirect(url_for("auth.login"))
+
     if request.method == "POST":
         nome = request.form.get("nome", "").strip()
         usuario = request.form.get("usuario", "").strip()
@@ -101,3 +101,44 @@ def cadastrar_usuario():
             except ValueError as erro:
                 flash(str(erro), "erro")
     return render_template("cadastro_usuario_flask.html")
+
+
+@auth_bp.route("/perfil", methods=["GET", "POST"])
+@login_required
+def perfil():
+    repositorio = current_app.config["USUARIO_REPOSITORY"]
+    usuario_id = session["usuario_id"]
+    perfil_usuario = repositorio.buscar_por_id(usuario_id)
+    if not perfil_usuario:
+        session.clear()
+        flash("A conta não existe mais.", "aviso")
+        return redirect(url_for("auth.login"))
+
+    if request.method == "POST":
+        nome = request.form.get("nome", "").strip()
+        usuario = request.form.get("usuario", "").strip()
+        senha = request.form.get("senha", "")
+        confirmar = request.form.get("confirmar_senha", "")
+        if senha and senha != confirmar:
+            flash("As senhas não coincidem.", "erro")
+        else:
+            try:
+                repositorio.atualizar_usuario(usuario_id, nome, usuario, senha or None)
+                session["nome"] = nome
+                session["usuario"] = usuario
+                flash("Perfil atualizado com sucesso.", "sucesso")
+                return redirect(url_for("auth.perfil"))
+            except ValueError as erro:
+                flash(str(erro), "erro")
+        perfil_usuario = {"id": usuario_id, "nome": nome, "usuario": usuario, "ativo": 1}
+    return render_template("perfil_flask.html", perfil=perfil_usuario)
+
+
+@auth_bp.route("/perfil/excluir", methods=["POST"])
+@login_required
+def excluir_perfil():
+    repositorio = current_app.config["USUARIO_REPOSITORY"]
+    repositorio.excluir_usuario(session["usuario_id"])
+    session.clear()
+    flash("Sua conta foi excluída.", "sucesso")
+    return redirect(url_for("auth.login"))

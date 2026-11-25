@@ -38,9 +38,11 @@ class PacienteManagerTests(unittest.TestCase):
         self.assertIn("já está cadastrado", repetido["mensagem"])
 
     def test_rejeita_cpf_invalido_e_data_futura(self):
-        cpf_invalido = dict(self.dados, cpf="11111111111")
+        cpf_ficticio = dict(self.dados, cpf="11111111111")
+        cpf_formato_invalido = dict(self.dados, cpf="CPF-123")
         data_futura = dict(self.dados, cpf="11144477735", data_nascimento="31/12/2999")
-        self.assertFalse(self.manager.cadastrar_paciente(cpf_invalido)["sucesso"])
+        self.assertTrue(self.manager.cadastrar_paciente(cpf_ficticio)["sucesso"])
+        self.assertFalse(self.manager.cadastrar_paciente(cpf_formato_invalido)["sucesso"])
         resultado_futuro = self.manager.cadastrar_paciente(data_futura)
         self.assertFalse(resultado_futuro["sucesso"])
         self.assertIn("não pode ser futura", resultado_futuro["mensagem"])
@@ -134,6 +136,16 @@ class PacienteManagerTests(unittest.TestCase):
 
         self.assertTrue(resultado_id_tres["sucesso"])
         self.assertEqual(resultado_id_tres["paciente"]["id"], terceiro["id"])
+
+    def test_aceita_cpf_ficticio_e_rejeita_formato_invalido(self):
+        cpf_ficticio = dict(self.dados, cpf="11111111111")
+        cpf_formato_invalido = dict(self.dados, cpf="CPF-123")
+        data_futura = dict(self.dados, cpf="11144477735", data_nascimento="31/12/2999")
+        self.assertTrue(self.manager.cadastrar_paciente(cpf_ficticio)["sucesso"])
+        self.assertFalse(self.manager.cadastrar_paciente(cpf_formato_invalido)["sucesso"])
+        resultado_futuro = self.manager.cadastrar_paciente(data_futura)
+        self.assertFalse(resultado_futuro["sucesso"])
+        self.assertIn("não pode ser futura", resultado_futuro["mensagem"])
 
 
 if __name__ == "__main__":

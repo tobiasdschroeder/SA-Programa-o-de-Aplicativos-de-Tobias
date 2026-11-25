@@ -64,6 +64,7 @@ app = create_app() if os.environ.get("FLASK_SECRET_KEY") or os.environ.get("FLAS
 
 
 if __name__ == "__main__":
+    # O modo debug deve ficar restrito ao ambiente de desenvolvimento local.
     os.environ.setdefault("FLASK_SECRET_KEY", "chave-local-apenas-para-desenvolvimento")
     application = create_app()
-    application.run(debug=True)
+    application.run(debug=os.environ.get("FLASK_ENV") == "development", use_reloader=False)
